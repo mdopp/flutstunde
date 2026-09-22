@@ -1,0 +1,535 @@
+/* Flutstunde — Styles */
+:root {
+  --bg-dark: #0f1520;
+  --bg-card: #1a2235;
+  --bg-panel: #151d2e;
+  --accent: #3a8fd6;
+  --accent-hover: #4aa3e8;
+  --text: #e8e8e8;
+  --text-muted: #8899aa;
+  --danger: #c0392b;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --radius: 8px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg-dark);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ── Screens ── */
+.screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.menu-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-screen.active {
+  display: flex;
+}
+
+.menu-content {
+  text-align: center;
+  max-width: 600px;
+  padding: 2rem;
+}
+
+.menu-content h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+.menu-tagline {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.menu-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--text-muted);
+}
+
+.menu-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  margin-top: 2rem;
+}
+
+/* ── Buttons ── */
+.btn {
+  font-family: var(--font);
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  background: #3a5a7a;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid #333;
+}
+
+.btn-secondary:hover {
+  border-color: #555;
+  color: var(--text);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.btn-danger:hover {
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.btn-small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.btn-large {
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+}
+
+.btn-send {
+  padding: 0.75rem 1.2rem;
+}
+
+/* ── Officer Selection ── */
+.officer-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.officer-screen.active {
+  display: flex;
+}
+
+.officer-select-content {
+  max-width: 800px;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+.officer-select-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.officer-hint {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.officer-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.officer-card {
+  background: var(--bg-card);
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.officer-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.officer-card.selected {
+  border-color: var(--accent);
+  background: rgba(58, 143, 214, 0.1);
+}
+
+.officer-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.officer-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.officer-traits {
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.officer-stats {
+  text-align: left;
+  margin-bottom: 0.75rem;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+  font-size: 0.75rem;
+}
+
+.stat-row span {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.stat-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar .fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.officer-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Duration Selector ── */
+.duration-selector {
+  margin-bottom: 2rem;
+}
+
+.duration-selector h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.duration-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.duration-btn {
+  font-family: var(--font);
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.duration-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.duration-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.duration-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Game Screen ── */
+#gameContainer {
+  display: none;
+  height: 100vh;
+  flex-direction: column;
+}
+
+#gameContainer.active {
+  display: flex;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: var(--bg-panel);
+  border-bottom: 1px solid #222;
+  flex-shrink: 0;
+}
+
+.game-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.game-officer-name {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-left: 0.75rem;
+  font-weight: normal;
+}
+
+.game-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.game-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+#gameCanvas {
+  flex: 1;
+  display: block;
+  background: #000;
+}
+
+.command-panel {
+  width: 300px;
+  min-width: 250px;
+  background: var(--bg-panel);
+  border-left: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* ── Officer Speech ── */
+.officer-speech {
+  padding: 0.75rem 1rem;
+  background: rgba(58, 143, 214, 0.08);
+  border-bottom: 1px solid #222;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--accent);
+  transition: all 0.3s;
+  max-height: 80px;
+  overflow: hidden;
+}
+
+/* ── Command Input ── */
+.command-input-area {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid #222;
+}
+
+#commandInput {
+  flex: 1;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid #333;
+  border-radius: var(--radius);
+  color: var(--text);
+  outline: none;
+}
+
+#commandInput:focus {
+  border-color: var(--accent);
+}
+
+/* ── Suggestions ── */
+.suggestions {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #222;
+}
+
+.suggestions small {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.suggestion-buttons {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+}
+
+.suggestion-btn {
+  font-family: var(--font);
+  font-size: 0.75rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--bg-card);
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.suggestion-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ── Game Log ── */
+.game-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.log-entry {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.25rem;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+
+.log-entry.command {
+  background: rgba(58, 143, 214, 0.1);
+  color: var(--accent);
+}
+
+.log-entry.response {
+  background: rgba(39, 174, 96, 0.1);
+  color: var(--success);
+}
+
+.log-entry.error {
+  background: rgba(192, 57, 43, 0.1);
+  color: var(--danger);
+}
+
+.log-entry.system {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── End Screen ── */
+.end-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+}
+
+.end-screen.active {
+  display: flex;
+}
+
+.end-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 2rem;
+}
+
+.end-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.end-comment {
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .game-main {
+    flex-direction: column;
+  }
+
+  .command-panel {
+    width: 100%;
+    min-width: unset;
+    max-height: 40vh;
+    border-left: none;
+    border-top: 1px solid #222;
+  }
+
+  #gameCanvas {
+    min-height: 50vh;
+  }
+
+  .officer-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Scrollbar ── */
+.game-log::-webkit-scrollbar {
+  width: 4px;
+}
+
+.game-log::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.log-entry {
+  animation: fadeIn 0.3s ease-out;
+}

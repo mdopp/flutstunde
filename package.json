@@ -1,0 +1,22 @@
+{
+  "name": "flutstunde",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server.mjs",
+    "test": "npx vitest run",
+    "lint": "eslint src/",
+    "check:arch": "node scripts/check-arch.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0",
+    "eslint": "^9.0.0"
+  }
+}

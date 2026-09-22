@@ -1,0 +1,23 @@
+{
+  "FLUTSTUNDE_PORT": {
+    "type": "port",
+    "default": "3000",
+    "exposure": "host"
+  },
+  "FLUTSTUNDE_SUBDOMAIN": {
+    "type": "subdomain",
+    "default": "flut",
+    "exposure": "public",
+    "proxyPort": "FLUTSTUNDE_PORT",
+    "proxyConfig": {
+      "block_exploits": true,
+      "ssl_forced": true,
+      "advanced_config": "__authelia_forward_auth__"
+    }
+  },
+  "FLUTSTUNDE_PUBLIC_DOMAIN": {
+    "type": "string",
+    "default": "{{PUBLIC_DOMAIN}}",
+    "exposure": "env"
+  }
+}
