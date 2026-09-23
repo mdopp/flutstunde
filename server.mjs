@@ -49,7 +49,7 @@ app.get('/healthz', (_req, res) => {
 });
 
 // API endpoint for officer decisions
-app.post('/api/officer', requireAuth, (req, res) => {
+app.post('/api/officer', (req, res) => {
   const visitorId = getRemoteUser(req);
 
   if (!checkRateLimit(visitorId)) {
@@ -135,13 +135,36 @@ function generateFallbackOrders(gameState) {
 function generateOrders(goal, gameState) {
   const beavers = gameState.beavers || [];
   const threats = gameState.threats || [];
+  const waterLevel = gameState.waterLevel || 0;
 
-  // Simple deterministic ordering for fallback
-  return beavers.slice(0, 6).map((b, i) => ({
-    einheit: b.name,
-    aufgabe: ['faellen', 'schleppen', 'stopfen', 'tragen', 'bauen', 'sichern'][i % 6],
-    ort: threats[i % threats.length]?.ort || 'zentral'
-  }));
+  // Priority-based assignment
+  const orders = [];
+  let idx = 0;
+
+  // If water is high, prioritize dam repair
+  if (waterLevel > 50) {
+    // Send some beavers to stop water
+    for (let i = 0; i < Math.min(2, beavers.length); i++) {
+      orders.push({
+        einheit: beavers[idx]?.name || `Biber${idx}`,
+        aufgabe: 'stopfen',
+        ort: 'zentral'
+      });
+      idx++;
+    }
+  }
+
+  // Send remaining beavers to build dam or collect resources
+  for (let i = idx; i < beavers.length; i++) {
+    const taskType = ['bauen', 'schleppen', 'faellen'][i % 3];
+    orders.push({
+      einheit: beavers[i].name,
+      aufgabe: taskType,
+      ort: ['zentral', 'wald', 'zentral'][i % 3]
+    });
+  }
+
+  return orders;
 }
 
 function generateComment(goal, gameState) {

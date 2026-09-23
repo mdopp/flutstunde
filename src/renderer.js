@@ -9,15 +9,26 @@ class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.resize();
+    // Defer initial resize — canvas is hidden until game starts
     window.addEventListener('resize', () => this.resize());
   }
 
   resize() {
     const container = this.canvas.parentElement;
-    this.canvas.width = container.clientWidth;
-    this.canvas.height = container.clientHeight || 540;
+    const w = container.clientWidth || 800;
+    const h = container.clientHeight || 540;
+    
+    // Skip resize if container has no size (hidden)
+    if (w === 0 || h === 0) return;
+    
+    this.canvas.width = w;
+    this.canvas.height = h;
     this.draw();
+  }
+
+  // Call this when canvas becomes visible
+  init() {
+    this.resize();
   }
 
   draw() {

@@ -13,6 +13,7 @@ window.game = game;
 const canvas = document.getElementById('gameCanvas');
 const renderer = new Renderer(canvas);
 window.__flutRenderer = renderer;
+// Don't draw yet — canvas is hidden until game starts
 
 // Initialize game controller
 const controller = new GameController();
