@@ -71,11 +71,64 @@ body {
   color: var(--text-muted);
 }
 
+/* ── Instructions ── */
+.menu-instructions {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.menu-instructions h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.instruction-item:last-child {
+  margin-bottom: 0;
+}
+
+.instruction-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(58, 143, 214, 0.1);
+  border-radius: 50%;
+}
+
+.instruction-item strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.instruction-item p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
 .menu-meta {
   font-size: 0.8rem;
   color: var(--text-muted);
   opacity: 0.6;
   margin-top: 2rem;
+  text-align: center;
 }
 
 /* ── Buttons ── */
@@ -87,6 +140,17 @@ body {
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
+  min-height: 44px; /* Touch-friendly */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-large {
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  width: 100%;
+  max-width: 300px;
 }
 
 .btn-primary {
@@ -224,7 +288,7 @@ body {
 }
 
 .stat-row span {
-  width: 80px;
+  width: 70px;
   flex-shrink: 0;
 }
 
@@ -241,6 +305,14 @@ body {
   background: var(--accent);
   border-radius: 3px;
   transition: width 0.3s;
+}
+
+/* ── Selection Actions ── */
+.selection-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .officer-desc {
@@ -538,15 +610,44 @@ body {
     font-size: 0.85rem;
   }
 
+  /* Instructions */
+  .menu-instructions {
+    padding: 1rem;
+  }
+
+  .menu-instructions h2 {
+    font-size: 1rem;
+  }
+
+  .instruction-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .instruction-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+  }
+
+  .instruction-item strong {
+    font-size: 0.9rem;
+  }
+
+  .instruction-item p {
+    font-size: 0.8rem;
+  }
+
   /* Buttons */
   .btn {
     font-size: 0.9rem;
-    padding: 0.6rem 1.2rem;
+    padding: 0.75rem 1.2rem;
   }
 
   .btn-large {
     font-size: 1rem;
-    padding: 0.8rem 1.5rem;
+    padding: 1rem 1.5rem;
   }
 
   /* Officer Selection */
@@ -643,6 +744,15 @@ body {
 
   .end-comment {
     font-size: 0.85rem;
+  }
+
+  /* Selection Actions */
+  .selection-actions {
+    flex-direction: column;
+  }
+
+  .selection-actions .btn {
+    width: 100%;
   }
 }
 

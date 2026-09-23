@@ -55,6 +55,31 @@ document.querySelectorAll('.duration-btn').forEach(btn => {
   });
 });
 
+// ── Menu Navigation ──
+document.getElementById('startGameBtn').addEventListener('click', () => {
+  document.getElementById('menuScreen').style.display = 'none';
+  document.getElementById('officerSelectScreen').style.display = 'flex';
+});
+
+document.getElementById('backToMenuBtn').addEventListener('click', () => {
+  document.getElementById('officerSelectScreen').style.display = 'none';
+  document.getElementById('menuScreen').style.display = 'flex';
+});
+
+document.getElementById('backToMenuBtn2').addEventListener('click', () => {
+  document.getElementById('endScreen').style.display = 'none';
+  document.getElementById('menuScreen').style.display = 'flex';
+  document.getElementById('gameContainer').style.display = 'none';
+  document.getElementById('officerSelectScreen').style.display = 'none';
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('endScreen').style.display = 'none';
+  document.getElementById('menuScreen').style.display = 'flex';
+  document.getElementById('gameContainer').style.display = 'none';
+  document.getElementById('officerSelectScreen').style.display = 'none';
+});
+
 // Load officers API
 fetch('/api/officers')
   .then(r => r.json())

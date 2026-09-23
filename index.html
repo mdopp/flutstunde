@@ -2,19 +2,57 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Flutstunde</title>
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
   <!-- Main Menu -->
-  <div id="menuScreen" class="screen menu-screen">
+  <div id="menuScreen" class="screen menu-screen active">
     <div class="menu-content">
       <h1>🦫 Flutstunde</h1>
-      <p class="menu-tagline">Ein Strategiespiel, in dem du befiehlst statt klickst.</p>
-      <p class="menu-desc">Das Tal läuft voll. Eine Biberkolonie baut einen Damm. Du bist der General —
-         stell das Ziel, nicht die Wege. Ein KI-Offizier führt die Mannschaft.</p>
-      <button id="startGameBtn" class="btn btn-primary" onclick="document.getElementById('menuScreen').style.display='none'; document.getElementById('officerSelectScreen').style.display='flex';">
+      <p class="menu-tagline">Du befiehlst. Der Offizier handelt.</p>
+      
+      <div class="menu-instructions">
+        <h2>So spielst du</h2>
+        <div class="instruction-item">
+          <span class="instruction-icon">🌊</span>
+          <div>
+            <strong>Das Wasser steigt</strong>
+            <p>Ein Bach läuft langsam voll. Dein Damm muss standhalten.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <span class="instruction-icon">🦫</span>
+          <div>
+            <strong>Biber arbeiten für dich</strong>
+            <p>Sie bauen, stopfen Löcher, retten Vorräte — aber nur wenn du sagst was.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <span class="instruction-icon">👤</span>
+          <div>
+            <strong>Ein Offizier führt</strong>
+            <p>Wähle einen Offizier. Er interpretiert deine Befehle und weist die Biber zu.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <span class="instruction-icon">🎯</span>
+          <div>
+            <strong>Gib Ziele, nicht Befehle</strong>
+            <p>„Sichere den Damm" — nicht „Biber 1 gehe nach links". Lass ihn denken.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <span class="instruction-icon">⏱️</span>
+          <div>
+            <strong>15 Sekunden cooldown</strong>
+            <p>Zwischen jedem Befehl. Nutze die Zeit, um die Lage zu beurteilen.</p>
+          </div>
+        </div>
+      </div>
+
+      <button id="startGameBtn" class="btn btn-primary btn-large">
         Neue Partie
       </button>
       <p class="menu-meta">Kein Login · Kein Tracker · Nur dein Browser</p>
@@ -25,7 +63,7 @@
   <div id="officerSelectScreen" class="screen officer-screen" style="display:none;">
     <div class="officer-select-content">
       <h2>Wähle deinen Offizier</h2>
-      <p class="officer-hint">Jeder Offizier interpretiert Befehle anders. Baue dir einen für ruhige und einen für knappe Partien.</p>
+      <p class="officer-hint">Jeder interpretiert Befehle anders.</p>
 
       <div class="officer-cards">
         <div class="officer-card" data-officer="espen">
@@ -33,12 +71,12 @@
           <h3>Espen</h3>
           <div class="officer-traits">wortkarg · ordnungsliebend</div>
           <div class="officer-stats">
-            <div class="stat-row"><span>Auffassung</span><div class="stat-bar" style="width:40%"><div class="fill" style="width:40%"></div></div></div>
-            <div class="stat-row"><span>Organisation</span><div class="stat-bar" style="width:80%"><div class="fill" style="width:80%"></div></div></div>
-            <div class="stat-row"><span>Weitblick</span><div class="stat-bar" style="width:20%"><div class="fill" style="width:20%"></div></div></div>
-            <div class="stat-row"><span>Durchsetzung</span><div class="stat-bar" style="width:60%"><div class="fill" style="width:60%"></div></div></div>
+            <div class="stat-row"><span>Auffassung</span><div class="stat-bar"><div class="fill" style="width:40%"></div></div></div>
+            <div class="stat-row"><span>Organisation</span><div class="stat-bar"><div class="fill" style="width:80%"></div></div></div>
+            <div class="stat-row"><span>Weitblick</span><div class="stat-bar"><div class="fill" style="width:20%"></div></div></div>
+            <div class="stat-row"><span>Durchsetzung</span><div class="stat-bar"><div class="fill" style="width:60%"></div></div></div>
           </div>
-          <p class="officer-desc">Tut genau das, was du gesagt hast, nie mehr. Absolut verlässlich.</p>
+          <p class="officer-desc">Tut genau das, was du gesagt hast. Absolut verlässlich.</p>
         </div>
 
         <div class="officer-card" data-officer="brack">
@@ -46,10 +84,10 @@
           <h3>Brack</h3>
           <div class="officer-traits">eigenmächtig · ungeduldig</div>
           <div class="officer-stats">
-            <div class="stat-row"><span>Auffassung</span><div class="stat-bar" style="width:60%"><div class="fill" style="width:60%"></div></div></div>
-            <div class="stat-row"><span>Organisation</span><div class="stat-bar" style="width:40%"><div class="fill" style="width:40%"></div></div></div>
-            <div class="stat-row"><span>Weitblick</span><div class="stat-bar" style="width:80%"><div class="fill" style="width:80%"></div></div></div>
-            <div class="stat-row"><span>Durchsetzung</span><div class="stat-bar" style="width:20%"><div class="fill" style="width:20%"></div></div></div>
+            <div class="stat-row"><span>Auffassung</span><div class="stat-bar"><div class="fill" style="width:60%"></div></div></div>
+            <div class="stat-row"><span>Organisation</span><div class="stat-bar"><div class="fill" style="width:40%"></div></div></div>
+            <div class="stat-row"><span>Weitblick</span><div class="stat-bar"><div class="fill" style="width:80%"></div></div></div>
+            <div class="stat-row"><span>Durchsetzung</span><div class="stat-bar"><div class="fill" style="width:20%"></div></div></div>
           </div>
           <p class="officer-desc">Legt deine Absicht großzügig aus. Manchmal zwei Schritte voraus.</p>
         </div>
@@ -59,12 +97,12 @@
           <h3>Erle</h3>
           <div class="officer-traits">vorsichtig · fürsorglich</div>
           <div class="officer-stats">
-            <div class="stat-row"><span>Auffassung</span><div class="stat-bar" style="width:100%"><div class="fill" style="width:100%"></div></div></div>
-            <div class="stat-row"><span>Organisation</span><div class="stat-bar" style="width:60%"><div class="fill" style="width:60%"></div></div></div>
-            <div class="stat-row"><span>Weitblick</span><div class="stat-bar" style="width:40%"><div class="fill" style="width:40%"></div></div></div>
-            <div class="stat-row"><span>Durchsetzung</span><div class="stat-bar" style="width:0%"><div class="fill" style="width:0%"></div></div></div>
+            <div class="stat-row"><span>Auffassung</span><div class="stat-bar"><div class="fill" style="width:100%"></div></div></div>
+            <div class="stat-row"><span>Organisation</span><div class="stat-bar"><div class="fill" style="width:60%"></div></div></div>
+            <div class="stat-row"><span>Weitblick</span><div class="stat-bar"><div class="fill" style="width:40%"></div></div></div>
+            <div class="stat-row"><span>Durchsetzung</span><div class="stat-bar"><div class="fill" style="width:0%"></div></div></div>
           </div>
-          <p class="officer-desc">Versteht dich am besten von allen. Sichert lieber zweimal.</p>
+          <p class="officer-desc">Versteht dich am besten. Sichert lieber zweimal.</p>
         </div>
       </div>
 
@@ -73,16 +111,16 @@
         <div class="duration-buttons">
           <button class="duration-btn" data-duration="5">5 min</button>
           <button class="duration-btn active" data-duration="10">10 min</button>
-          <button class="duration-btn active" data-duration="15">15 min</button>
+          <button class="duration-btn" data-duration="15">15 min</button>
           <button class="duration-btn" data-duration="20">20 min</button>
         </div>
         <p class="duration-note">Die Dauer steuert, wie schnell das Wasser steigt.</p>
       </div>
 
-      <button id="startBtn" class="btn btn-primary btn-large">Partie starten</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('officerSelectScreen').style.display='none'; document.getElementById('menuScreen').style.display='flex';">
-        ← Zurück
-      </button>
+      <div class="selection-actions">
+        <button id="startBtn" class="btn btn-primary btn-large">Partie starten</button>
+        <button id="backToMenuBtn" class="btn btn-secondary">← Zurück</button>
+      </div>
     </div>
   </div>
 
@@ -95,7 +133,7 @@
       </div>
       <div class="game-controls">
         <button id="pauseBtn" class="btn btn-small">⏸ Pause</button>
-        <button id="backToMenuBtn" class="btn btn-small btn-danger">← Menü</button>
+        <button id="backToMenuBtn" class="btn btn-small btn-danger">✕ Schließen</button>
       </div>
     </div>
 
@@ -106,21 +144,21 @@
         <div id="officerResponse" class="officer-speech"></div>
 
         <div class="command-input-area">
-          <input id="commandInput" type="text" placeholder="Befehl geben: 'Sichere den Damm', 'Vorräte retten'..." autocomplete="off">
-          <button id="sendCommand" class="btn btn-primary btn-send">Befehl</button>
+          <input id="commandInput" type="text" placeholder="Befehl geben..." autocomplete="off">
+          <button id="sendCommand" class="btn btn-primary btn-send">Senden</button>
         </div>
 
         <div class="suggestions">
           <small>Vorschläge:</small>
           <div class="suggestion-buttons">
-            <button class="suggestion-btn" data-suggestion="Sichere den Damm">Damm sichern</button>
+            <button class="suggestion-btn" data-suggestion="Sichere den Damm">Damm</button>
             <button class="suggestion-btn" data-suggestion="Rette die Vorräte">Vorräte</button>
-            <button class="suggestion-btn" data-suggestion="Erweitere den Damm">Damm bauen</button>
+            <button class="suggestion-btn" data-suggestion="Erweitere den Damm">Bauen</button>
           </div>
         </div>
 
         <div class="game-log" id="gameLog">
-          <div class="log-entry system">Partie gestartet. Wähle einen Befehl oder tippe einen eigenen.</div>
+          <div class="log-entry system">Partie gestartet. Wähle einen Befehl.</div>
         </div>
       </div>
     </div>
@@ -132,10 +170,8 @@
       <h2>BILANZ</h2>
       <div id="endDetails"></div>
       <div id="endComment" class="end-comment"></div>
-      <button id="resetBtn" class="btn btn-primary btn-large" onclick="this.closest('.end-content').parentElement.style.display='none'; document.getElementById('menuScreen').style.display='flex'; document.getElementById('gameContainer').style.display='none'; document.getElementById('officerSelectScreen').style.display='none';">Neue Partie</button>
-      <button id="backToMenuBtn2" class="btn btn-secondary" onclick="document.getElementById('endScreen').style.display='none'; document.getElementById('menuScreen').style.display='flex'; document.getElementById('gameContainer').style.display='none'; document.getElementById('officerSelectScreen').style.display='none';">
-        ← Zum Menü
-      </button>
+      <button id="resetBtn" class="btn btn-primary btn-large">Neue Partie</button>
+      <button id="backToMenuBtn2" class="btn btn-secondary">← Zum Menü</button>
     </div>
   </div>
 
