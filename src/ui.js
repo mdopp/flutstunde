@@ -109,6 +109,10 @@ class GameController {
       const officerNameEl = document.getElementById('gameOfficerName');
       if (officerNameEl) officerNameEl.textContent = `— ${this.gameState.officer.name}`;
     }
+    // Resize and redraw canvas now that game container is visible
+    requestAnimationFrame(() => {
+      this.renderer?.resize();
+    });
   }
 
   startGame() {
