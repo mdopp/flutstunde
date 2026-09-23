@@ -132,8 +132,8 @@
       <h2>BILANZ</h2>
       <div id="endDetails"></div>
       <div id="endComment" class="end-comment"></div>
-      <button id="resetBtn" class="btn btn-primary btn-large">Neue Partie</button>
-      <button id="backToMenuBtn2" class="btn btn-secondary" onclick="document.getElementById('endScreen').style.display='none'; document.getElementById('menuScreen').style.display='flex';">
+      <button id="resetBtn" class="btn btn-primary btn-large" onclick="this.closest('.end-content').parentElement.style.display='none'; document.getElementById('menuScreen').style.display='flex'; document.getElementById('gameContainer').style.display='none'; document.getElementById('officerSelectScreen').style.display='none';">Neue Partie</button>
+      <button id="backToMenuBtn2" class="btn btn-secondary" onclick="document.getElementById('endScreen').style.display='none'; document.getElementById('menuScreen').style.display='flex'; document.getElementById('gameContainer').style.display='none'; document.getElementById('officerSelectScreen').style.display='none';">
         ← Zum Menü
       </button>
     </div>

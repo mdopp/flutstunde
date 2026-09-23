@@ -15,6 +15,10 @@ export default defineConfig({
       }
     }
   },
+  test: {
+    include: ['src/**/*.test.js'],
+    exclude: ['tests/e2e/**/*']
+  },
   server: {
     port: 3000,
     proxy: {

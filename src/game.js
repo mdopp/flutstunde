@@ -29,7 +29,7 @@ const TASKS = {
 };
 
 // ── Game State ──
-let state = null;
+export let state = null;
 
 function createGame(durationMinutes, officerId) {
   const beavers = BEAVER_NAMES.slice(0, 6 + Math.floor(durationMinutes / 5)).map((name, i) => ({
@@ -221,6 +221,28 @@ function finishGame() {
   state.phase = 'finished';
   if (animationFrame) cancelAnimationFrame(animationFrame);
 
+  // Show the HTML end screen overlay (if accessible)
+  if (typeof window !== 'undefined' && window.document) {
+    const endScreen = window.document.getElementById('endScreen');
+    const endDetails = window.document.getElementById('endDetails');
+    const endComment = window.document.getElementById('endComment');
+    const lastHistory = state.history[state.history.length - 1];
+    if (endScreen && lastHistory) {
+      endScreen.style.display = 'flex';
+      if (endDetails) {
+        endDetails.innerHTML = `
+          <div class="score-display">Punkte: ${lastHistory.score}</div>
+          <div>🦫 Biber gerettet: ${lastHistory.saved.beavers}</div>
+          <div>🍎 Vorräte gerettet: ${lastHistory.saved.food}</div>
+          <div>👶 Kinder gerettet: ${lastHistory.saved.children}</div>
+        `;
+      }
+      if (endComment) {
+        endComment.textContent = lastHistory.comment;
+      }
+    }
+  }
+
   const officer = state.officer;
   const waterProgress = Math.min(100, (state.elapsed / state.duration) * 100);
   const score = Math.round(
@@ -382,5 +404,6 @@ export {
   startGameLoop,
   sendCommand,
   getDefaultOfficers,
-  loadOfficer
+  loadOfficer,
+  finishGame
 };

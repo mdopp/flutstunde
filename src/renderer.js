@@ -3,6 +3,8 @@
  * Renders the cross-section view with rising water, beavers, and dam
  */
 
+import { state } from './game.js';
+
 class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
@@ -338,6 +340,14 @@ class Renderer {
       ctx.fillText('PAUSE', w / 2, h / 2);
       ctx.textAlign = 'left';
     }
+
+    // End screen overlay
+    if (state.phase === 'finished') {
+      const lastHistory = state.history[state.history.length - 1];
+      if (lastHistory && lastHistory.type === 'finished') {
+        this.drawEndScreen(lastHistory.score, lastHistory.comment);
+      }
+    }
   }
 
   drawEndScreen(score, comment) {
@@ -424,7 +434,5 @@ function wrapText(text, maxWidth, fontSize) {
 }
 
 // Export
-export default class RendererClass {
-  static TASKS = TASKS;
-  static wrapText = wrapText;
-}
+export default Renderer;
+export { TASKS, wrapText };

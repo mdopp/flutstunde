@@ -3,10 +3,10 @@
  * Manages the game UI: officer selection, commands, pause, results
  */
 
+// Renderer is provided by main.js (window.__flutRenderer)
 class GameController {
   constructor() {
     this.canvas = document.getElementById('gameCanvas');
-    this.renderer = new Renderer(this.canvas);
     this.currentView = 'menu'; // menu, officer-select, playing, ended
     this.selectedOfficer = null;
     this.selectedDuration = 15;
@@ -22,6 +22,15 @@ class GameController {
 
     this.setupEventListeners();
     this.showMenu();
+  }
+
+  // Lazy-accessor for renderer (available after main.js initializes)
+  get renderer() {
+    return window.__flutRenderer;
+  }
+
+  set renderer(val) {
+    // No-op: renderer is provided by main.js
   }
 
   setupEventListeners() {
@@ -78,7 +87,7 @@ class GameController {
     this.menuScreen.style.display = 'flex';
     this.officerSelectScreen.style.display = 'none';
     this.gameContainer.style.display = 'none';
-    this.renderer.draw();
+    this.renderer?.draw();
   }
 
   showOfficerSelect() {
@@ -96,6 +105,10 @@ class GameController {
     this.gameLog.innerHTML = '';
     this.commandInput.disabled = false;
     this.sendBtn.disabled = false;
+    if (this.gameState?.officer) {
+      const officerNameEl = document.getElementById('gameOfficerName');
+      if (officerNameEl) officerNameEl.textContent = `— ${this.gameState.officer.name}`;
+    }
   }
 
   startGame() {

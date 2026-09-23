@@ -16,6 +16,7 @@ window.__flutRenderer = renderer;
 
 // Initialize game controller
 const controller = new GameController();
+window.gameController = controller;
 
 // Handle resize
 window.addEventListener('resize', () => {
