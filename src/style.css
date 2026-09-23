@@ -514,6 +514,138 @@ body {
   }
 }
 
+/* ── Mobile (small screens) ── */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  /* Menu */
+  .menu-content {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .menu-content h1 {
+    font-size: 2rem;
+  }
+
+  .menu-tagline {
+    font-size: 1rem;
+  }
+
+  .menu-desc {
+    font-size: 0.85rem;
+  }
+
+  /* Buttons */
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .btn-large {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  /* Officer Selection */
+  .officer-select-content {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .officer-select-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .officer-icon {
+    font-size: 2rem;
+  }
+
+  .officer-card h3 {
+    font-size: 1rem;
+  }
+
+  .officer-card {
+    padding: 1rem;
+  }
+
+  /* Stats */
+  .stat-row {
+    font-size: 0.7rem;
+  }
+
+  .stat-row span {
+    width: 60px;
+  }
+
+  /* Duration Buttons */
+  .duration-buttons {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .duration-btn {
+    flex: 1 1 30%;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+  }
+
+  /* Game Header */
+  .game-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .game-title {
+    font-size: 1rem;
+  }
+
+  .game-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Command Input */
+  .command-input-area {
+    flex-direction: column;
+  }
+
+  #commandInput {
+    width: 100%;
+  }
+
+  .btn-send {
+    width: 100%;
+  }
+
+  /* Suggestions */
+  .suggestion-buttons {
+    flex-wrap: wrap;
+  }
+
+  .suggestion-btn {
+    flex: 1 1 40%;
+    text-align: center;
+  }
+
+  /* End Screen */
+  .end-content {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .end-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .end-comment {
+    font-size: 0.85rem;
+  }
+}
+
 /* ── Scrollbar ── */
 .game-log::-webkit-scrollbar {
   width: 4px;
