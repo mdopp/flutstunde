@@ -13,8 +13,8 @@ spec:
     - name: flutstunde
       image: ghcr.io/mdopp/flutstunde:latest
       ports:
-        - containerPort: 3000
-          hostPort: 3000
+        - containerPort: {{FLUTSTUNDE_PORT}}
+          hostPort: {{FLUTSTUNDE_PORT}}
           protocol: TCP
       resources:
         limits:
@@ -22,4 +22,4 @@ spec:
           cpu: "250m"
       env:
         - name: PORT
-          value: "3000"
+          value: "{{FLUTSTUNDE_PORT}}"
