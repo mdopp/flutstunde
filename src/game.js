@@ -4,13 +4,12 @@
  */
 
 // ── Constants ──
-const GAME_WIDTH = 960;
-const GAME_HEIGHT = 540;
-const DAMM_POSITION_X = 400; // x position of the dam gap
-const DAMM_GAP_WIDTH = 80;
-const DAMM_GAP_HEIGHT = 200;
-const DAMM_BASE_Y = GAME_HEIGHT - 50;
-const DAMM_TOP_Y = DAMM_BASE_Y - DAMM_GAP_HEIGHT;
+const WORLD_WIDTH = 1200;
+const WORLD_HEIGHT = 800;
+const DAMM_X = 600; // x position of the dam
+const DAMM_HEIGHT = 300;
+const DAMM_Y = WORLD_HEIGHT - 100; // base Y position
+const WATER_START_Y = WORLD_HEIGHT - 50; // starting water line
 
 // Beaver names
 const BEAVER_NAMES = [
@@ -32,19 +31,25 @@ const TASKS = {
 export let state = null;
 
 function createGame(durationMinutes, officerId) {
-  const beavers = BEAVER_NAMES.slice(0, 6 + Math.floor(durationMinutes / 5)).map((name, i) => ({
-    id: i,
-    name,
-    task: null,
-    x: 50 + i * 100,
-    y: DAMM_BASE_Y - 30,
-    targetX: 0,
-    targetY: 0,
-    moving: false,
-    taskTimer: 0,
-    taskProgress: 0,
-    health: 100
-  }));
+  const beaverCount = 6 + Math.floor(durationMinutes / 5);
+  const beavers = [];
+  
+  for (let i = 0; i < beaverCount; i++) {
+    beavers.push({
+      id: i,
+      name: BEAVER_NAMES[i % BEAVER_NAMES.length],
+      task: null,
+      x: 100 + i * 120,
+      y: DAMM_Y - 50,
+      targetX: 100 + i * 120,
+      targetY: DAMM_Y - 50,
+      moving: false,
+      taskTimer: 0,
+      taskProgress: 0,
+      health: 100,
+      activity: 'idle' // idle, working, moving, resting
+    });
+  }
 
   state = {
     phase: 'playing', // playing, paused, finished
@@ -59,7 +64,7 @@ function createGame(durationMinutes, officerId) {
       children: 10
     },
     saved: {
-      beavers: 6,
+      beavers: beaverCount,
       food: 50,
       children: 10
     },
@@ -69,7 +74,8 @@ function createGame(durationMinutes, officerId) {
     lastCommandTime: 0,
     commandCooldown: 15, // seconds
     history: [],
-    startTime: Date.now()
+    startTime: Date.now(),
+    lastFrameTime: performance.now()
   };
 
   return state;
@@ -107,7 +113,6 @@ function getDefaultOfficers() {
 }
 
 // ── Game Loop ──
-let lastFrameTime = 0;
 let animationFrame = null;
 
 function gameLoop(timestamp) {
@@ -116,8 +121,8 @@ function gameLoop(timestamp) {
     return;
   }
 
-  const dt = (timestamp - lastFrameTime) / 1000;
-  lastFrameTime = timestamp;
+  const dt = (timestamp - state.lastFrameTime) / 1000;
+  state.lastFrameTime = timestamp;
 
   // Update elapsed time
   state.elapsed += dt;
@@ -160,10 +165,12 @@ function gameLoop(timestamp) {
         beaver.moving = false;
         beaver.x = beaver.targetX;
         beaver.y = beaver.targetY;
+        beaver.activity = 'working';
       } else {
         const speed = 100 * dt;
         beaver.x += (dx / dist) * speed;
         beaver.y += (dy / dist) * speed;
+        beaver.activity = 'moving';
       }
     }
   }
@@ -215,6 +222,7 @@ function completeTask(beaver) {
   beaver.task = null;
   beaver.taskTimer = 0;
   beaver.taskProgress = 0;
+  beaver.activity = 'idle';
 }
 
 function finishGame() {
@@ -366,17 +374,18 @@ function applyOrders(orders) {
 
       // Move beaver to location
       const locations = {
-        zentral: { x: DAMM_POSITION_X + DAMM_GAP_WIDTH / 2, y: DAMM_BASE_Y - 20 },
-        wald: { x: 80, y: DAMM_BASE_Y - 40 },
-        vorrat: { x: GAME_WIDTH - 100, y: DAMM_BASE_Y - 30 },
-        links: { x: DAMM_POSITION_X - 40, y: DAMM_BASE_Y - 20 },
-        rechts: { x: DAMM_POSITION_X + DAMM_GAP_WIDTH + 40, y: DAMM_BASE_Y - 20 }
+        zentral: { x: DAMM_X, y: DAMM_Y - 20 },
+        wald: { x: 100, y: DAMM_Y - 40 },
+        vorrat: { x: WORLD_WIDTH - 100, y: DAMM_Y - 30 },
+        links: { x: DAMM_X - 100, y: DAMM_Y - 20 },
+        rechts: { x: DAMM_X + 100, y: DAMM_Y - 20 }
       };
 
       const loc = locations[order.ort] || locations.zentral;
       beaver.targetX = loc.x;
       beaver.targetY = loc.y;
       beaver.moving = true;
+      beaver.activity = 'moving';
     }
   }
 }
@@ -384,7 +393,6 @@ function applyOrders(orders) {
 function resetGame() {
   if (animationFrame) cancelAnimationFrame(animationFrame);
   state = null;
-  lastFrameTime = 0;
 }
 
 function getCurrentState() {
@@ -392,8 +400,10 @@ function getCurrentState() {
 }
 
 function startGameLoop() {
-  lastFrameTime = performance.now();
-  animationFrame = requestAnimationFrame(gameLoop);
+  if (state) {
+    state.lastFrameTime = performance.now();
+    animationFrame = requestAnimationFrame(gameLoop);
+  }
 }
 
 // ── Export for module use ──
@@ -405,5 +415,10 @@ export {
   sendCommand,
   getDefaultOfficers,
   loadOfficer,
-  finishGame
+  finishGame,
+  WORLD_WIDTH,
+  WORLD_HEIGHT,
+  DAMM_X,
+  DAMM_Y,
+  DAMM_HEIGHT
 };

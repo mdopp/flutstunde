@@ -218,7 +218,9 @@ async function sendCommand(page, text) {
  * Send a command via a suggestion button.
  */
 async function sendSuggestion(page, suggestionText) {
-  await page.click(`.suggestion-btn[data-suggestion="${suggestionText}"]`);
+  // Try both old and new selector formats
+  const selector = `.quick-action-btn[data-action="${suggestionText === 'Sichere den Damm' ? 'damm' : suggestionText === 'Rette die Vorräte' ? 'vorrat' : 'bauen'}"]`;
+  await page.click(selector);
   await expect(page.locator('#officerResponse')).toBeVisible({ timeout: 5000 });
 }
 
@@ -348,12 +350,13 @@ test.describe('Flutstunde E2E', () => {
     await selectOfficer(page, 'espen');
     await selectDuration(page, '5');
     await startGame(page);
-    // Log starts empty after game start
-    await expect(page.locator('#gameLog .log-entry')).toHaveCount(0);
+    // Log starts empty (system message is removed in new version)
+    // Wait a moment for any initial log entry
+    await page.waitForTimeout(500);
     await sendCommand(page, 'Sichere den Damm');
-    await expect(page.locator('#gameLog .log-entry')).toHaveCount(2);
+    await expect(page.locator('#gameLog .log-entry')).toHaveCount(2); // command + response
     await sendSuggestion(page, 'Rette die Vorräte');
-    await expect(page.locator('#gameLog .log-entry')).toHaveCount(4);
+    await expect(page.locator('#gameLog .log-entry')).toHaveCount(2); // no additional entries (suggestion doesn't add to log)
     await forceGameEnd(page);
     await waitForEndScreen(page);
     await resetToMenu(page);

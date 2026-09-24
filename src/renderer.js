@@ -3,13 +3,15 @@
  * Renders the cross-section view with rising water, beavers, and dam
  */
 
-import { state } from './game.js';
+import { state, WORLD_WIDTH, WORLD_HEIGHT, DAMM_X, DAMM_Y, DAMM_HEIGHT } from './game.js';
 
 class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    // Defer initial resize — canvas is hidden until game starts
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.scale = 1;
     window.addEventListener('resize', () => this.resize());
   }
 
@@ -40,17 +42,36 @@ class Renderer {
     ctx.fillStyle = '#1a1a2e';
     ctx.fillRect(0, 0, w, h);
 
+    if (!state) {
+      // Draw placeholder when no game
+      ctx.fillStyle = '#fff';
+      ctx.font = '24px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText('Kein Spiel aktiv', w / 2, h / 2);
+      ctx.textAlign = 'left';
+      return;
+    }
+
+    // Calculate world-to-screen transform
+    const worldToScreenX = w / WORLD_WIDTH;
+    const worldToScreenY = h / WORLD_HEIGHT;
+    const worldToScreen = Math.min(worldToScreenX, worldToScreenY);
+
+    // Draw world
+    ctx.save();
+    ctx.scale(worldToScreen, worldToScreen);
+
     // Sky gradient (darker as water rises)
-    const skyGradient = ctx.createLinearGradient(0, 0, 0, h * 0.4);
+    const skyGradient = ctx.createLinearGradient(0, 0, 0, WORLD_HEIGHT * 0.4);
     const danger = Math.min(1, state?.waterLevel || 0) / 100;
     skyGradient.addColorStop(0, `rgb(${30 + danger * 40}, ${20 + danger * 10}, ${50 - danger * 20})`);
     skyGradient.addColorStop(1, `rgb(${60 + danger * 30}, ${50 + danger * 20}, ${40 + danger * 10})`);
     ctx.fillStyle = skyGradient;
-    ctx.fillRect(0, 0, w, h * 0.4);
+    ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
     // Ground
-    const groundY = h - 80;
-    const groundGradient = ctx.createLinearGradient(0, groundY, 0, h);
+    const groundY = WORLD_HEIGHT - 100;
+    const groundGradient = ctx.createLinearGradient(0, groundY, 0, WORLD_HEIGHT);
     groundGradient.addColorStop(0, '#4a6741');
     groundGradient.addColorStop(1, '#3a5030');
     ctx.fillStyle = groundGradient;
@@ -58,34 +79,39 @@ class Renderer {
     ctx.moveTo(0, groundY);
 
     // Terrain
-    for (let x = 0; x <= w; x += 20) {
+    for (let x = 0; x <= WORLD_WIDTH; x += 20) {
       const terrainHeight = Math.sin(x * 0.01) * 15 + Math.sin(x * 0.03) * 8;
       ctx.lineTo(x, groundY + terrainHeight);
     }
-    ctx.lineTo(w, h);
-    ctx.lineTo(0, h);
+    ctx.lineTo(WORLD_WIDTH, WORLD_HEIGHT);
+    ctx.lineTo(0, WORLD_HEIGHT);
     ctx.closePath();
     ctx.fill();
 
     // Left forest
-    this.drawForest(ctx, w, groundY);
+    this.drawForest(ctx, WORLD_WIDTH, groundY);
 
     // Right bank
-    this.drawRightBank(ctx, w, groundY);
+    this.drawRightBank(ctx, WORLD_WIDTH, groundY);
 
     // Dam
-    this.drawDamm(ctx, w, groundY);
+    this.drawDamm(ctx, WORLD_WIDTH, groundY);
 
     // Water (rising from right)
-    this.drawWater(ctx, w, h, groundY);
+    this.drawWater(ctx, WORLD_WIDTH, WORLD_HEIGHT, groundY);
 
     // Beavers
-    if (state) {
-      this.drawBeavers(ctx, w, groundY);
-    }
+    this.drawBeavers(ctx, WORLD_WIDTH, groundY);
 
     // UI overlay
-    this.drawUI(ctx, w, h);
+    this.drawUI(ctx, WORLD_WIDTH, WORLD_HEIGHT);
+
+    ctx.restore();
+
+    // Draw world border
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, 0, w, h);
   }
 
   drawForest(ctx, w, groundY) {
@@ -147,9 +173,9 @@ class Renderer {
   }
 
   drawDamm(ctx, w, groundY) {
-    const dammX = w / 3;
+    const dammX = DAMM_X;
     const dammWidth = 80;
-    const dammHeight = 200;
+    const dammHeight = DAMM_HEIGHT;
 
     // Dam structure
     const healthColor = state?.dammHealth > 60 ? '#6b8e6b' :
@@ -413,6 +439,24 @@ class Renderer {
     // Store button bounds for click detection
     this.buttonBounds = { x: btnX, y: btnY, w: btnW, h: btnH };
   }
+
+  wrapText(text, maxWidth, fontSize) {
+    const words = text.split(' ');
+    const lines = [];
+    let current = '';
+
+    for (const word of words) {
+      const test = current + (current ? ' ' : '') + word;
+      if (ctx?.measureText(test).width > maxWidth && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = test;
+      }
+    }
+    if (current) lines.push(current);
+    return lines;
+  }
 }
 
 // ── Task definitions (for renderer) ──
@@ -425,25 +469,6 @@ const TASKS = {
   SICHERN: { name: 'sichern', icon: '👁️', duration: 5000 }
 };
 
-// ── Utility ──
-function wrapText(text, maxWidth, fontSize) {
-  const words = text.split(' ');
-  const lines = [];
-  let current = '';
-
-  for (const word of words) {
-    const test = current + (current ? ' ' : '') + word;
-    if (ctx?.measureText(test).width > maxWidth && current) {
-      lines.push(current);
-      current = word;
-    } else {
-      current = test;
-    }
-  }
-  if (current) lines.push(current);
-  return lines;
-}
-
 // Export
 export default Renderer;
-export { TASKS, wrapText };
+export { TASKS };

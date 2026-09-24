@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flutstunde</title>
   <link rel="stylesheet" href="src/style.css">
 </head>
@@ -16,35 +16,35 @@
       <div class="menu-instructions">
         <h2>So spielst du</h2>
         <div class="instruction-item">
-          <span class="instruction-icon">🌊</span>
+          <div class="instruction-icon">🌊</div>
           <div>
             <strong>Das Wasser steigt</strong>
             <p>Ein Bach läuft langsam voll. Dein Damm muss standhalten.</p>
           </div>
         </div>
         <div class="instruction-item">
-          <span class="instruction-icon">🦫</span>
+          <div class="instruction-icon">🦫</div>
           <div>
             <strong>Biber arbeiten für dich</strong>
             <p>Sie bauen, stopfen Löcher, retten Vorräte — aber nur wenn du sagst was.</p>
           </div>
         </div>
         <div class="instruction-item">
-          <span class="instruction-icon">👤</span>
+          <div class="instruction-icon">👤</div>
           <div>
             <strong>Ein Offizier führt</strong>
             <p>Wähle einen Offizier. Er interpretiert deine Befehle und weist die Biber zu.</p>
           </div>
         </div>
         <div class="instruction-item">
-          <span class="instruction-icon">🎯</span>
+          <div class="instruction-icon">🎯</div>
           <div>
             <strong>Gib Ziele, nicht Befehle</strong>
             <p>„Sichere den Damm" — nicht „Biber 1 gehe nach links". Lass ihn denken.</p>
           </div>
         </div>
         <div class="instruction-item">
-          <span class="instruction-icon">⏱️</span>
+          <div class="instruction-icon">⏱️</div>
           <div>
             <strong>15 Sekunden cooldown</strong>
             <p>Zwischen jedem Befehl. Nutze die Zeit, um die Lage zu beurteilen.</p>
@@ -138,25 +138,45 @@
     </div>
 
     <div class="game-main">
-      <canvas id="gameCanvas"></canvas>
+      <div class="game-visual">
+        <canvas id="gameCanvas"></canvas>
+      </div>
 
       <div class="command-panel">
-        <div id="officerResponse" class="officer-speech"></div>
+        <!-- Officer Communication -->
+        <div class="officer-communication">
+          <div class="officer-header">
+            <span class="officer-avatar" id="officerAvatar">🪶</span>
+            <div class="officer-info">
+              <div class="officer-name" id="officerName">Offizier</div>
+              <div class="officer-status" id="officerStatus">Wartet auf Befehle...</div>
+            </div>
+          </div>
 
-        <div class="command-input-area">
-          <input id="commandInput" type="text" placeholder="Befehl geben..." autocomplete="off">
-          <button id="sendCommand" class="btn btn-primary btn-send">Senden</button>
-        </div>
-
-        <div class="suggestions">
-          <small>Vorschläge:</small>
-          <div class="suggestion-buttons">
-            <button class="suggestion-btn" data-suggestion="Sichere den Damm">Damm</button>
-            <button class="suggestion-btn" data-suggestion="Rette die Vorräte">Vorräte</button>
-            <button class="suggestion-btn" data-suggestion="Erweitere den Damm">Bauen</button>
+          <div class="officer-response" id="officerResponse">
+            <div class="response-content">
+              <p class="response-text">Ich bin bereit. Gib mir ein Ziel — „Sichere den Damm", „Rette die Vorräte" oder beschreibe, was du erreichen willst.</p>
+            </div>
           </div>
         </div>
 
+        <!-- Command Input -->
+        <div class="command-input-area">
+          <input id="commandInput" type="text" placeholder="Befehl eingeben..." autocomplete="off">
+          <button id="sendCommand" class="btn btn-primary btn-send">Senden</button>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <small>Schnellaktionen:</small>
+          <div class="quick-action-buttons">
+            <button class="quick-action-btn" data-action="damm">🛡️ Damm sichern</button>
+            <button class="quick-action-btn" data-action="vorrat">🍎 Vorräte retten</button>
+            <button class="quick-action-btn" data-action="bauen">🔨 Damm bauen</button>
+          </div>
+        </div>
+
+        <!-- Game Log -->
         <div class="game-log" id="gameLog">
           <div class="log-entry system">Partie gestartet. Wähle einen Befehl.</div>
         </div>
