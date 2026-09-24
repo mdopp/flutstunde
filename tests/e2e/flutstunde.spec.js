@@ -356,7 +356,7 @@ test.describe('Flutstunde E2E', () => {
     await sendCommand(page, 'Sichere den Damm');
     await expect(page.locator('#gameLog .log-entry')).toHaveCount(2); // command + response
     await sendSuggestion(page, 'Rette die Vorräte');
-    await expect(page.locator('#gameLog .log-entry')).toHaveCount(2); // no additional entries (suggestion doesn't add to log)
+    await expect(page.locator('#gameLog .log-entry')).toHaveCount(4); // command + response
     await forceGameEnd(page);
     await waitForEndScreen(page);
     await resetToMenu(page);

@@ -9,7 +9,6 @@ const WORLD_HEIGHT = 800;
 const DAMM_X = 600; // x position of the dam
 const DAMM_HEIGHT = 300;
 const DAMM_Y = WORLD_HEIGHT - 100; // base Y position
-const WATER_START_Y = WORLD_HEIGHT - 50; // starting water line
 
 // Beaver names
 const BEAVER_NAMES = [
@@ -75,7 +74,8 @@ function createGame(durationMinutes, officerId) {
     commandCooldown: 15, // seconds
     history: [],
     startTime: Date.now(),
-    lastFrameTime: performance.now()
+    lastFrameTime: performance.now(),
+    lastResponse: null
   };
 
   return state;
@@ -252,7 +252,6 @@ function finishGame() {
   }
 
   const officer = state.officer;
-  const waterProgress = Math.min(100, (state.elapsed / state.duration) * 100);
   const score = Math.round(
     (state.saved.beavers / state.beavers.length) * 40 +
     (state.saved.food / 100) * 30 +
@@ -293,75 +292,91 @@ function sendCommand(goalText) {
 
   state.lastCommandTime = now;
 
-  // Send to officer API
-  fetch('/api/officer', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      goal: goalText,
-      gameState: {
-        waterLevel: Math.round(state.waterLevel),
-        dammHealth: Math.round(state.dammHealth),
-        dammWidth: Math.round(state.dammWidth),
-        resources: { ...state.resources },
-        beavers: state.beavers.map(b => ({
-          name: b.name,
-          task: b.task,
-          x: Math.round(b.x),
-          y: Math.round(b.y)
-        })),
-        threats: [
-          { ort: 'links', danger: Math.min(100, state.waterLevel * 0.8) },
-          { ort: 'zentral', danger: Math.min(100, state.waterLevel) },
-          { ort: 'rechts', danger: Math.min(100, state.waterLevel * 0.9) }
-        ]
-      },
-      officerId: state.officerId
-    })
-  })
-    .then(r => r.json())
-    .then(data => {
-      applyOrders(data.auftraege);
-      state.lastResponse = data;
-      if (typeof window !== 'undefined' && window.document) {
-        const r = window.__flutRenderer;
-        if (r) r.draw();
-      }
-    })
-    .catch(() => {
-      // Model unreachable — fallback
-      const fallback = generateFallbackOrders();
-      applyOrders(fallback.auftraege);
-      state.lastResponse = { ...fallback, source: 'fallback' };
-      if (typeof window !== 'undefined' && window.document) {
-        const r = window.__flutRenderer;
-        if (r) r.draw();
-      }
-    });
+  // Generate orders locally (no API needed)
+  const orders = generateOrders(goalText);
+  applyOrders(orders.auftraege);
+  state.lastResponse = orders;
+  
+  if (typeof window !== 'undefined' && window.document) {
+    const r = window.__flutRenderer;
+    if (r) r.draw();
+  }
 }
 
-function generateFallbackOrders() {
-  const activeThreats = state.beavers.filter(b => !b.task).length;
+function generateOrders(goalText) {
+  const beaverCount = state.beavers.filter(b => !b.task).length;
   const orders = [];
-
-  // Distribute beavers intelligently
-  const stoppingCount = Math.min(3, activeThreats);
-  const gatheringCount = Math.min(2, activeThreats - stoppingCount);
-
-  for (let i = 0; i < state.beavers.length && orders.length < 6; i++) {
-    const b = state.beavers[i];
-    if (!b.task) {
-      if (orders.length < stoppingCount) {
-        orders.push({ einheit: b.name, aufgabe: 'STOPFEN', ort: 'zentral' });
-      } else if (orders.length < stoppingCount + gatheringCount) {
-        orders.push({ einheit: b.name, aufgabe: 'FALLEN', ort: 'wald' });
-      } else {
-        orders.push({ einheit: b.name, aufgabe: 'TRAGEN', ort: 'vorrat' });
+  
+  // Simple AI: distribute beavers based on goal
+  if (goalText.includes('damm') || goalText.includes('sichere')) {
+    // Assign beavers to repair dam
+    const stoppingCount = Math.min(3, beaverCount);
+    for (let i = 0; i < state.beavers.length && orders.length < stoppingCount; i++) {
+      const b = state.beavers[i];
+      if (!b.task) {
+        orders.push({ 
+          einheit: b.name, 
+          aufgabe: 'STOPFEN', 
+          ort: 'zentral' 
+        });
+      }
+    }
+  } else if (goalText.includes('vorrat') || goalText.includes('retten')) {
+    // Assign beavers to save food
+    const gatheringCount = Math.min(2, beaverCount);
+    for (let i = 0; i < state.beavers.length && orders.length < gatheringCount; i++) {
+      const b = state.beavers[i];
+      if (!b.task) {
+        orders.push({ 
+          einheit: b.name, 
+          aufgabe: 'TRAGEN', 
+          ort: 'vorrat' 
+        });
+      }
+    }
+  } else if (goalText.includes('bauen') || goalText.includes('erweitere')) {
+    // Assign beavers to build dam
+    const buildingCount = Math.min(2, beaverCount);
+    for (let i = 0; i < state.beavers.length && orders.length < buildingCount; i++) {
+      const b = state.beavers[i];
+      if (!b.task) {
+        orders.push({ 
+          einheit: b.name, 
+          aufgabe: 'BAUEN', 
+          ort: 'zentral' 
+        });
+      }
+    }
+  }
+  
+  // Add some fallback orders if no beavers were assigned
+  if (orders.length === 0 && beaverCount > 0) {
+    const fallbackCount = Math.min(2, beaverCount);
+    for (let i = 0; i < state.beavers.length && orders.length < fallbackCount; i++) {
+      const b = state.beavers[i];
+      if (!b.task) {
+        orders.push({ 
+          einheit: b.name, 
+          aufgabe: 'STOPFEN', 
+          ort: 'zentral' 
+        });
       }
     }
   }
 
-  return { auftraege: orders, sprechblase: 'Ich handle nach eigenem Ermessen.', vorschlaege: [] };
+  // Generate officer speech bubble
+  const officer = state.officer;
+  const sprechblase = officer.traits.includes('wortkarg') 
+    ? 'Verstanden.' 
+    : officer.traits.includes('vorsichtig')
+    ? 'Ich handle vorsichtig, General.'
+    : 'Alles klar, General.';
+
+  return { 
+    auftraege: orders, 
+    sprechblase,
+    vorschlaege: [] 
+  };
 }
 
 function applyOrders(orders) {

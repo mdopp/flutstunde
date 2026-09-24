@@ -42,19 +42,6 @@ if (savedDuration) {
   });
 }
 
-// Save selections
-document.querySelectorAll('.officer-card').forEach(card => {
-  card.addEventListener('click', () => {
-    localStorage.setItem('flutstunde_officer', card.dataset.officer);
-  });
-});
-
-document.querySelectorAll('.duration-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    localStorage.setItem('flutstunde_duration', btn.dataset.duration);
-  });
-});
-
 // ── Menu Navigation ──
 document.getElementById('startGameBtn').addEventListener('click', () => {
   document.getElementById('menuScreen').style.display = 'none';

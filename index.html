@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Flutstunde</title>
   <link rel="stylesheet" href="src/style.css">
 </head>
@@ -66,7 +66,7 @@
       <p class="officer-hint">Jeder interpretiert Befehle anders.</p>
 
       <div class="officer-cards">
-        <div class="officer-card" data-officer="espen">
+        <div class="officer-card selected" data-officer="espen">
           <div class="officer-icon">🪶</div>
           <h3>Espen</h3>
           <div class="officer-traits">wortkarg · ordnungsliebend</div>
@@ -129,7 +129,7 @@
     <div class="game-header">
       <div class="game-title">
         <span>🦫 Flutstunde</span>
-        <span class="game-officer-name" id="gameOfficerName"></span>
+        <span class="game-officer-name" id="gameOfficerName">— Offizier</span>
       </div>
       <div class="game-controls">
         <button id="pauseBtn" class="btn btn-small">⏸ Pause</button>
@@ -140,6 +140,23 @@
     <div class="game-main">
       <div class="game-visual">
         <canvas id="gameCanvas"></canvas>
+        <div class="game-status">
+          <div class="status-item">
+            <span class="status-icon">🌊</span>
+            <span class="status-label">Wasser</span>
+            <span class="status-value" id="waterLevel">0%</span>
+          </div>
+          <div class="status-item">
+            <span class="status-icon">🏗️</span>
+            <span class="status-label">Damm</span>
+            <span class="status-value" id="dammHealth">100%</span>
+          </div>
+          <div class="status-item">
+            <span class="status-icon">⏱️</span>
+            <span class="status-label">Zeit</span>
+            <span class="status-value" id="timer">10:00</span>
+          </div>
+        </div>
       </div>
 
       <div class="command-panel">
